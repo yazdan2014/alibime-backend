@@ -1,0 +1,16 @@
+{
+  "name": "interval-process",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "database": "file:../database",
+    "infrastructure": "file:../infrastructure",
+    "moment-jalaali": "^0.9.2"
+  }
+}
