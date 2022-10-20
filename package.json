@@ -23,8 +23,7 @@
     "interval-process": "file:interval-process",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "restful-server": "file:restful-server",
-    "restful-server-admin": "file:restful-server-admin"
+    "restful-server": "file:restful-server"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"

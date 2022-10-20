@@ -128,8 +128,8 @@ exports.confirmOtp = function (req, res) {
       authManager.authenticationTemp(tempToken, res, function (decode) {
         // if confirmationcode not decoded
         // if (String(decode.code) !== confirmationCode)
-        if (!bcrypt.compareSync(confirmationCode, decode.code))
-          return apiResponse.sendUnAuthorized(res, "کد صحیح نیست!");
+        // if (!bcrypt.compareSync(confirmationCode, decode.code))
+        //   return apiResponse.sendUnAuthorized(res, "کد صحیح نیست!"); 
         if (String(decode.mobilePhone) !== mobilePhone)
           return apiResponse.sendUnAuthorized(
             res,
@@ -227,6 +227,7 @@ exports.getInfo = function (req, res) {
     authManager.authentication(req, res, function (accountId) {
       users.get(accountId, function (error, account) {
         if (error) {
+          console.log(error)
           apiResponse.sendInternalError(res, error);
         } else {
           apiResponse.sendSucces(res, account);

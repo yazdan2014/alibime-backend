@@ -55,36 +55,34 @@ function databaseManager() {
           process.env.ALIBIME_DEBUG_CONNECT_TO_CONTAINER;
 
         let mongoServerUrl;
+          mongoServerUrl = "mongodb://root:4N9MKqHuy32cZYxjJto6U1HY@gina.iran.liara.ir:34517/my-app?authSource=admin"
+        // if (inDebug) {
+        //   if (connectToContainer) {
+        //     mongoServerUrl = format(
+        //       "mongodb://%s:%s@%s/%s?directConnection=true",
+        //       user,
+        //       password,
+        //       url,
+        //       dbname
+        //     );
+        //   }
+        // } else {
+        //   mongoServerUrl = format(
+        //     "mongodb://%s:%s@%s/%s?directConnection=true",
+        //     user,
+        //     password,
+        //     url,
+        //     dbname
+        //   );
 
-        if (inDebug) {
-          if (connectToContainer) {
-            mongoServerUrl = format(
-              "mongodb://%s:%s@%s/%s?retryWrites=true&w=majority",
-              user,
-              password,
-              url,
-              dbname
-            );
-          } else {
-            mongoServerUrl = "mongodb://127.0.0.1:27017/" + dbname;
-          }
-        } else {
-          mongoServerUrl = format(
-            "mongodb://%s:%s@%s/%s?retryWrites=true&w=majority",
-            user,
-            password,
-            url,
-            dbname
-          );
-
-          // mongoServerUrl = format(
-          //   "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority",
-          //   user,
-          //   password,
-          //   url,
-          //   dbname
-          // );
-        }
+        //   // mongoServerUrl = format(
+        //   //   "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority",
+        //   //   user,
+        //   //   password,
+        //   //   url,
+        //   //   dbname
+        //   // );
+        // }
 
         mongo.connect(
           mongoServerUrl,
@@ -94,6 +92,7 @@ function databaseManager() {
           },
           (err, client) => {
             if (err) {
+              logger.log_error(err)
               logger.log_error("can not connect to database");
               this.connected = false;
               this.client = null;

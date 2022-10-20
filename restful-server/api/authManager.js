@@ -48,14 +48,18 @@ exports.signTemp = function (mobilePhone, code, res, callback) {
 exports.authentication = function (req, res, callback) {
   try {
     var token = req.headers["x-access-token"];
+
     if (!token) {
       apiResponse.sendUnAuthorized(res);
+      console.log(req)
       logger.log_info("account authentication failed");
       return;
     }
     jwt.verify(token, config.secret, function (err, decoded) {
       if (err) {
         apiResponse.sendUnAuthorized(res);
+        logger.log_info("unja: "+ token)
+        
         logger.log_info("account authentication failed");
         return;
       }
