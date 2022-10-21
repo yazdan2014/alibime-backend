@@ -58,8 +58,7 @@ exports.authentication = function (req, res, callback) {
     jwt.verify(token, config.secret, function (err, decoded) {
       if (err) {
         apiResponse.sendUnAuthorized(res);
-        logger.log_info("unja: "+ token)
-        
+
         logger.log_info("account authentication failed");
         return;
       }

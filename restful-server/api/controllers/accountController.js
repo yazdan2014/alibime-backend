@@ -90,19 +90,22 @@ exports.sendOtpBySms = function (req, res) {
         hashedCode,
         res,
         function (tempToken, expire) {
-          // send sms
-          smsHelper
-            .sendOTP(mobilePhone, code)
-            .then((result) => {
-              apiResponse.sendSucces(res, {
-                tempToken: tempToken,
-                expire: expire,
-              });
-            })
-            .catch((error) => {
-              apiResponse.sendInternalError(res, error);
-              logger.log_error(error);
-            });
+          apiResponse.sendSucces(res, {
+            tempToken: tempToken,
+            expire: expire,
+          });
+          // smsHelper
+          //   .sendOTP(mobilePhone, code)
+          //   .then((result) => {
+          //     apiResponse.sendSucces(res, {
+          //       tempToken: tempToken,
+          //       expire: expire,
+          //     });
+          //   })
+          //   .catch((error) => {
+          //     apiResponse.sendInternalError(res, error);
+          //     logger.log_error(error);
+          //   });
         }
       );
     }

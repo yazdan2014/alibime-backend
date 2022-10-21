@@ -74,7 +74,7 @@ function thirdpartyPriceCalculate(
 
   callback
 ) {
-  let Base_price = 0;
+  let Base_price = 0; //Mokhtalef
   let Havades_ranande = 0;
   let oldCarBuild = new Date().getFullYear() - carBuildYear; // محاسبه مقدار تفاوت سال ساخت با الان
   // Set Base Price From Car Data's
@@ -85,10 +85,10 @@ function thirdpartyPriceCalculate(
     carBrand == 16 ||
     carModel == 383661
   ) {
-    Base_price = 2294300; // پیکان ، پراید ، رنو و هیلمن
+    Base_price = 2294300; // پیکان ، پراید ، رنو و هیلمن 
     Havades_ranande = 336000;
   } else if (carType == "passenger" && carCylinder < 4) {
-    Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر
+    Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر 
     Havades_ranande = 222300;
   } else if (carType == "passenger" && carCylinder == 4) {
     Base_price = 2697100; // قیمت پایه برای خودروهای زیر ۴ سیلندر
@@ -171,25 +171,25 @@ function thirdpartyPriceCalculate(
   }
 
   // محاسبه حداکثر تعهد مالی برای جبران خسارت
-  let basePropertyDamage = 2446.8;
+  let basePropertyDamage = 2510; //Mokhtalef
   let finalBaseProperty = 0;
-  if (propertyDamage > 16 && propertyDamage < 33) {
-    let baseProperty = propertyDamage - 16;
+  if (propertyDamage > 20 && propertyDamage < 41) {
+    let baseProperty = propertyDamage - 20;
     let step1 = baseProperty * basePropertyDamage;
     finalBaseProperty = step1;
     Base_price = Base_price + step1;
   }
-  if (propertyDamage > 32 && propertyDamage < 97) {
+  if (propertyDamage > 40 && propertyDamage < 121) {
     let basePropertyStep2 = basePropertyDamage / 1.67;
-    let base = propertyDamage - 32;
+    let base = propertyDamage - 40;
     let first = basePropertyStep2 * base;
     let step2 = first + 39148.8;
     finalBaseProperty = step2;
     Base_price = Base_price + step2;
   }
-  if (propertyDamage > 96) {
-    let basePropertyStep3 = basePropertyDamage * 0.398;
-    let base = propertyDamage - 96;
+  if (propertyDamage > 120) {
+    let basePropertyStep3 = basePropertyDamage * 2.51;
+    let base = propertyDamage - 120;
     let first = basePropertyStep3 * base;
     let step3 = first + 132918.4;
     finalBaseProperty = step3;
@@ -749,6 +749,7 @@ exports.getCarBodyoffers = function (req, res) {
         if (error) {
           apiResponse.sendInternalError(res, error);
         } else {
+          logger.log_info(price.final)
           return apiResponse.sendSucces(res, price);
         }
       }
@@ -909,7 +910,7 @@ function carBodyPrice(
 
   // اعمال مالیات
   final = final * (1 + 0.09);
-
+  logger.log_info(final)
   const data = {
     covers: Math.ceil(c4),
     final: Math.ceil(final),
@@ -917,7 +918,6 @@ function carBodyPrice(
     f2: f2,
     c4: c4,
   };
-
   callback(null, data);
 }
 
