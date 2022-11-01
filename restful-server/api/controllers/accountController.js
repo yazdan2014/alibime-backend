@@ -94,18 +94,18 @@ exports.sendOtpBySms = function (req, res) {
             tempToken: tempToken,
             expire: expire,
           });
-          // smsHelper
-          //   .sendOTP(mobilePhone, code)
-          //   .then((result) => {
-          //     apiResponse.sendSucces(res, {
-          //       tempToken: tempToken,
-          //       expire: expire,
-          //     });
-          //   })
-          //   .catch((error) => {
-          //     apiResponse.sendInternalError(res, error);
-          //     logger.log_error(error);
-          //   });
+          smsHelper
+            .sendOTP(mobilePhone, code)
+            .then((result) => {
+              apiResponse.sendSucces(res, {
+                tempToken: tempToken,
+                expire: expire,
+              });
+            })
+            .catch((error) => {
+              apiResponse.sendInternalError(res, error);
+              logger.log_error(error);
+            });
         }
       );
     }

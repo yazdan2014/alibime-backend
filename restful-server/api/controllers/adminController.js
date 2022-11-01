@@ -79,11 +79,11 @@ exports.confirmCode = function (req, res) {
         // if (String(decode.code) !== confirmationCode)
         if (!bcrypt.compareSync(confirmationCode, decode.code))
           return apiResponse.sendUnAuthorized(res, "کد صحیح نیست!");
-        // if (String(decode.mobilePhone) !== mobilePhone)
-        //   return apiResponse.sendUnAuthorized(
-        //     res,
-        //     "اطلاعات وارد شده صحیح نیست."
-        //   );
+        if (String(decode.mobilePhone) !== mobilePhone)
+          return apiResponse.sendUnAuthorized(
+            res,
+            "اطلاعات وارد شده صحیح نیست."
+          );
 
         admin.getByUserName(username, function (error, account) {
           if (error) {
