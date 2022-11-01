@@ -121,7 +121,7 @@ function thirdpartyCalculate(
   ) {
     Base_price = 2776000; // پیکان ، پراید ، رنو و هیلمن
     basePropertyDamage = 21300;
-    Havades_ranande = 252000
+    Havades_ranande = 420000
   } else if (carType == "passenger" && carCylinder < 4) {
     Base_price = 2_344_000; // قیمت پایه برای خودروهای ۳ سیلندر
     basePropertyDamage = 18000;
@@ -137,69 +137,87 @@ function thirdpartyCalculate(
   } else if (carType == "motorcycle" && carCylinder == 0) {
     Base_price = 580_200; // قیمت پایه برای موتورسیکلت گازی
     Havades_ranande = 220000;
+    basePropertyDamage = 4500
   } else if (carType == "motorcycle" && carCylinder == 1) {
     Base_price = 711_000; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
     Havades_ranande = 220000;
+    basePropertyDamage = 5500
   } else if (carType == "motorcycle" && carCylinder >= 2) {
     Base_price = 781_000; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
     Havades_ranande = 220000;
+    basePropertyDamage = 6000
   } else if (carType == "motorcycle" && carCylinder == 20) {
     Base_price = 840_000; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
     Havades_ranande = 220000;
+    basePropertyDamage = 6500
   } else if (carType == "van" && carModel == 7) {
     Base_price = 6_722_000; // قیمت پایه برای خودرو ون تا ۷ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 51600
   } else if (carType == "van" && (carModel == 9 || carModel == 8)) {
     Base_price = 6_916_000; // قیمت پایه برای خودرو ون تا ۹ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 54800
   } else if (carType == "van" && carModel == 10) {
     Base_price = 6_993_000; // قیمت پایه برای خودرو ون تا ۱۰ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 63192
   } else if (carType == "van" && carModel <= 16 && carModel >= 11) {
     Base_price = 8_598_000; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 66000
   } else if (carType == "van" && carModel <= 21 && carModel >= 17) {
     Base_price = 8_931_000; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 96000
   } else if (carType == "van" && carModel <= 27 && carModel >= 22) {
     Base_price = 13_169_000; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 101100
   } else if (carType == "van" && carModel <= 40 && carModel >= 28) {
     Base_price = 16_569_000; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 1415400
   } else if (carType == "van" && carModel <= 44 && carModel >= 41) {
     Base_price = 17_584_000; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
     Havades_ranande = 600000
+    basePropertyDamage = 1819800
   } else if (carType == "pickup" && carModel == 10) {
     Base_price = 2_872_000; // قیمت پایه برای خودرو بارکش تا ۱ تن
     Havades_ranande = 720000;
+    basePropertyDamage = 22100
   } else if (carType == "pickup" && carModel == 13) {
     Base_price = 3_458_000; // قیمت پایه برای خودرو بارکش تا ۳ تن
     Havades_ranande = 720000;
+    basePropertyDamage = 26600
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     (carModel == 35 || carModel == 4)
   ) {
     Base_price = 4_377_000; // قیمت پایه برای خودرو بارکش تا ۵ تن
     Havades_ranande = 720000
+    basePropertyDamage = 33600
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 510
   ) {
     Base_price = 5_608_000; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
     Havades_ranande = 720000
+    basePropertyDamage = 43100
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 1020
   ) {
     Base_price = 6_526_000; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
     Havades_ranande = 720000
+    basePropertyDamage = 50100
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 200
   ) {
-    Base_price = 6_916_000; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
+    Base_price = 6_916_000; // قیمت پایه برای خودرو بارکش بیش از ۲۰ تن
     Havades_ranande = 720000
+    basePropertyDamage = 53100
   }
 
   logger.log_info("base price" + Base_price )
