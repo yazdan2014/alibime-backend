@@ -55,128 +55,6 @@ exports.getThirdPartyoffers = function (req, res) {
   }
 };
 
-function thirdpartyPriceCalculate(
-  carType,
-  carBrand,
-  carModel,
-  carCylinder,
-  jarimeDays,
-  carBuildYear,
-  policyStatus,
-  lastPolicyStartDate,
-  lastPolicyExpDate,
-  propertyDamage,
-  carThirdDiscount,
-  havadesDiscount,
-  maaliDamage,
-  jaaniDamage,
-  havadesDamage,
-
-  callback
-) {
-  let Base_price = 0; //Mokhtalef
-  let Havades_ranande = 0;
-  let z40 = 1.66
-  let z120 = 2.5
-  let oldCarBuild = new Date().getFullYear() - carBuildYear; // محاسبه مقدار تفاوت سال ساخت با الان
-  // Set Base Price From Car Data's
-  // مرحله اول تعیین قیمت پایه و میزان جریمه دیرکرد براساس تایپ خودرو
-
-
-  let ThirdDiscountCalculated = 0;
-  let havadesDiscountCalculated = 0;
-  let thirdDiscountCal = 0;
-  let maaliDamageCal = 0;
-
-  // محاسبه جریمه دیرکرد
-  let jarimeCalculate = 0;
-  let jarimeCalculateDay = 0;
-  if (!jarimeDays == 0 || policyStatus == "no") {
-    if (jarimeDays > 365 || policyStatus == "no") {
-      jarimeDays = 365;
-    }
-    jarimeCalculate = (Base_price * jarimeDays) / 365;
-    jarimeCalculateDay = jarimeCalculate / jarimeDays;
-    // Base_price = Base_price + jarimeCalculate;
-  }
-
-  // محاسبه حداکثر تعهد مالی برای جبران خسارت
-  let basePropertyDamage = 2510; //Mokhtalef
-  let finalBaseProperty = 0;
-  let alpha = 20 * basePropertyDamage
-  let beta = 80 * basePropertyDamage / z40
-  if (propertyDamage > 20 && propertyDamage < 41) {
-    let baseProperty = propertyDamage - 20;
-    let step1 = baseProperty * basePropertyDamage;
-    finalBaseProperty = step1;
-    Base_price = Base_price + step1;
-  }
-  if (propertyDamage > 40 && propertyDamage < 121) {
-    let basePropertyStep2 = basePropertyDamage / z40;
-    let base = propertyDamage - 40;
-    let first = basePropertyStep2 * base;
-    let step2 = first + alpha;
-    finalBaseProperty = step2;
-    Base_price = Base_price + step2;
-  }
-  if (propertyDamage > 120) {
-    let basePropertyStep3 = basePropertyDamage / z120;
-    let base = propertyDamage - 120;
-    let first = basePropertyStep3 * base;
-    let step3 = first + alpha + beta
-    finalBaseProperty = step3;
-    Base_price = Base_price + step3;
-  }
-
-  let Final_price = Base_price;
-  Final_price = Final_price + Havades_ranande;
-
-  if (policyStatus == "zero") {
-    let price = Final_price * 0.95;
-    Final_price = price;
-  }
-
-  // خودروهای بالای 15 سال ساخت به ازای هر سال 2درصد افزایش قیمت دارند
-  if (oldCarBuild > 15) {
-    let a = (+oldCarBuild - 15) * 2; // محاسبه عدد درصد
-    let value = (+Final_price * +a) / 100; // محاسبه مقدار عددی افزایش
-    Final_price = +Final_price + value;
-  }
-  let finalPriceWithoutMaaliat = Final_price;
-  let maaliat = 0;
-  maaliat = Final_price * 0.09;
-  Final_price = Final_price + maaliat;
-  Final_price = Final_price + jarimeCalculate;
-  logger.log_info(
-    "Jarime Dirkard: " +
-      Math.round(jarimeCalculate) +
-      "   " +
-      " ThirdDiscount: " +
-      ThirdDiscountCalculated +
-      "   " +
-      " HavadesRanande: " +
-      Havades_ranande +
-      "   " +
-      "Maaliat: " +
-      Math.round(maaliat) +
-      "   " +
-      " Final Price: " +
-      Final_price
-  );
-  const data = {
-    finalPrice: Math.ceil(Final_price),
-    withoutMaaliat: Math.ceil(finalPriceWithoutMaaliat),
-    maaliat: Math.ceil(maaliat),
-    jarimeDays: Math.ceil(jarimeCalculate),
-    jarimeCalculateDay: Math.ceil(jarimeCalculateDay),
-    jarimeDaysDays: jarimeDays,
-    thirdDiscount: ThirdDiscountCalculated,
-    havadesFinal: Havades_ranande,
-    finalBaseProperty: finalBaseProperty,
-  };
-  callback(null, data);
-}
-
 function thirdpartyCalculate(
   carType,
   carBrand,
@@ -193,7 +71,6 @@ function thirdpartyCalculate(
   maaliDamage,
   jaaniDamage,
   havadesDamage,
-
   callback
 ) {
   logger.log_info(
@@ -235,138 +112,126 @@ function thirdpartyCalculate(
 
   // مرحله اول تعیین قیمت پایه و میزان جریمه دیرکرد براساس تایپ خودرو
   let basePropertyDamage = 0;
-  let z1 = 0;
-  let z2 = 0;
-  let c32 = 0;
-  let c96 = 0;
+  let z1 = 1.66;
+  let z2 = 2.5;
   if (
     (carType == "passenger" && carBrand == 21) ||
     carBrand == 16 ||
     carModel == 383661
   ) {
-    Base_price = 2294300; // پیکان ، پراید ، رنو و هیلمن
+    Base_price = 2776000; // پیکان ، پراید ، رنو و هیلمن
     basePropertyDamage = 21300;
-    z1 = 1.66406;
-    z2 = 2.50588;
-    c32 = 340800;
-    c96 = 1160000;
     Havades_ranande = 252000
   } else if (carType == "passenger" && carCylinder < 4) {
-    Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر
-    basePropertyDamage = 2;
+    Base_price = 2_344_000; // قیمت پایه برای خودروهای ۳ سیلندر
+    basePropertyDamage = 18000;
+    Havades_ranande = 420000
   } else if (carType == "passenger" && carCylinder == 4) {
-    Base_price = 2697100; // قیمت پایه برای خودروهای زیر ۴ سیلندر
+    Base_price = 3_263_000; // قیمت پایه برای خودروهای ۴ سیلندر
     basePropertyDamage = 25100;
     Havades_ranande = 420000;
-    z1 = 1.67333;
-    z2 = 2.51;
-    c32 = 401600;
-    c96 = 1361600;
   } else if (carType == "passenger" && carCylinder > 4) {
-    Base_price = 3018400; // قیمت پایه برای خودروهای ۶سیلندر به بالا
+    Base_price = 3_652_000; // قیمت پایه برای خودروهای ۶سیلندر به بالا
     Havades_ranande = 420000;
     basePropertyDamage = 28100;
-    z1 = 1.67262;
-    z2 = 2.50893;
-    c32 = 449600;
-    c96 = 1524800;
   } else if (carType == "motorcycle" && carCylinder == 0) {
-    Base_price = 481000; // قیمت پایه برای موتورسیکلت گازی
+    Base_price = 580_200; // قیمت پایه برای موتورسیکلت گازی
     Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder == 1) {
-    Base_price = 587600; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
+    Base_price = 711_000; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
     Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder >= 2) {
-    Base_price = 645500; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
+    Base_price = 781_000; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
     Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder == 20) {
-    Base_price = 694200; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
+    Base_price = 840_000; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
     Havades_ranande = 220000;
   } else if (carType == "van" && carModel == 7) {
-    Base_price = 5555400; // قیمت پایه برای خودرو ون تا ۷ نفره
+    Base_price = 6_722_000; // قیمت پایه برای خودرو ون تا ۷ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && (carModel == 9 || carModel == 8)) {
-    Base_price = 5715900; // قیمت پایه برای خودرو ون تا ۹ نفره
+    Base_price = 6_916_000; // قیمت پایه برای خودرو ون تا ۹ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel == 10) {
-    Base_price = 5779600; // قیمت پایه برای خودرو ون تا ۱۰ نفره
+    Base_price = 6_993_000; // قیمت پایه برای خودرو ون تا ۱۰ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 16 && carModel >= 11) {
-    Base_price = 7105400; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
+    Base_price = 8_598_000; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 21 && carModel >= 17) {
-    Base_price = 7380700; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
+    Base_price = 8_931_000; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 27 && carModel >= 22) {
-    Base_price = 10883700; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
+    Base_price = 13_169_000; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 40 && carModel >= 28) {
-    Base_price = 13693300; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
+    Base_price = 16_569_000; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
     Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 44 && carModel >= 41) {
-    Base_price = 14532100; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
+    Base_price = 17_584_000; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
     Havades_ranande = 600000
   } else if (carType == "pickup" && carModel == 10) {
-    Base_price = 2373500; // قیمت پایه برای خودرو بارکش تا ۱ تن
+    Base_price = 2_872_000; // قیمت پایه برای خودرو بارکش تا ۱ تن
     Havades_ranande = 720000;
   } else if (carType == "pickup" && carModel == 13) {
-    Base_price = 2858000; // قیمت پایه برای خودرو بارکش تا ۳ تن
+    Base_price = 3_458_000; // قیمت پایه برای خودرو بارکش تا ۳ تن
     Havades_ranande = 720000;
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     (carModel == 35 || carModel == 4)
   ) {
-    Base_price = 3617600; // قیمت پایه برای خودرو بارکش تا ۵ تن
+    Base_price = 4_377_000; // قیمت پایه برای خودرو بارکش تا ۵ تن
     Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 510
   ) {
-    Base_price = 4634800; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
+    Base_price = 5_608_000; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
     Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 1020
   ) {
-    Base_price = 5393300; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
+    Base_price = 6_526_000; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
     Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 200
   ) {
-    Base_price = 5715900; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
+    Base_price = 6_916_000; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
     Havades_ranande = 720000
   }
 
+  logger.log_info("base price" + Base_price )
+  let c40 = 20 * basePropertyDamage
+  let c120 = 80 * basePropertyDamage / z1
   // محاسبه حداکثر تعهد مالی برای جبران خسارت
   let finalBaseProperty = 0;
-  if (propertyDamage > 16 && propertyDamage < 33) {
-    let baseProperty = propertyDamage - 16;
+  if (propertyDamage > 20 && propertyDamage < 41) {
+    let baseProperty = propertyDamage - 20;
     let step1 = baseProperty * basePropertyDamage;
     finalBaseProperty = step1 / 10;
     Base_price = Base_price + finalBaseProperty;
   }
 
-  if (propertyDamage > 32 && propertyDamage < 97) {
+  if (propertyDamage > 40 && propertyDamage < 121) {
     let basePropertyStep2 = basePropertyDamage / z1;
-    let base = propertyDamage - 32;
-    let step1 = 16 * basePropertyDamage;
+    let base = propertyDamage - 40;
     let first = basePropertyStep2 * base;
-    let step2 = first + c32;
+    let step2 = first + c40;
     finalBaseProperty = step2 / 10;
     Base_price = Base_price + finalBaseProperty;
   }
 
-  if (propertyDamage > 96) {
+  if (propertyDamage > 120) {
     let basePropertyStep3 = basePropertyDamage / z2;
-    let base3 = propertyDamage - 96;
+    let base3 = propertyDamage - 120;
     let first3 = basePropertyStep3 * base3;
-    let step2 = 32 * basePropertyDamage;
-    let step3 = first3 + c96;
+    let step3 = first3 + c120 + c40;
     finalBaseProperty = step3 / 10;
     Base_price = Base_price + finalBaseProperty;
   }
-
+  logger.log_info("final base property:"+finalBaseProperty)
   // فرمول اصلی محاسبه شخص ثالث
   let base = Base_price;
   let takhfif = carThirdDiscount;
@@ -420,7 +285,7 @@ function thirdpartyCalculate(
   } else {
     cal2 = havadesRanande;
   }
-  logger.log_error(cal2);
+
   let cal3 = (cal1 + cal2) * 1.09;
   let cal5 = (cal1 + cal2) * 0.09;
   let cal4 = cal1 + cal2; // without maaliat
@@ -450,9 +315,9 @@ function thirdpartyCalculate(
   // logger.log_info("finalPrice: " + finalPrice);
   // finalPrice = finalPrice + cal3;
 
-  if (policyStatus == "yes") {
-    finalPrice = finalPrice * 0.975; // تخفیف ۵درصدی برای خرید نقدی(همیشه)
-  }
+  // if (policyStatus == "yes") {
+  //   finalPrice = finalPrice * 0.975; // تخفیف ۵درصدی برای خرید نقدی(همیشه)
+  // }
 
   // logger.log_info(cal3);
   const data = {
@@ -464,192 +329,6 @@ function thirdpartyCalculate(
     jarimeSum: Math.ceil(jarimeCalculate),
     jarimePerDay: Math.ceil(jarimeCalculateDay),
     jarimeDays: Math.ceil(jarimeDays),
-  };
-  callback(null, data);
-}
-
-function thirdpartyPriceCalculate2(
-  carType,
-  carBrand,
-  carModel,
-  carCylinder,
-  jarimeDays,
-  carBuildYear,
-  policyStatus,
-  lastPolicyStartDate,
-  lastPolicyExpDate,
-  propertyDamage,
-  carThirdDiscount,
-  havadesDiscount,
-  maaliDamage,
-  jaaniDamage,
-  havadesDamage,
-
-  callback
-) {
-  let Base_price = 0;
-  let Havades_ranande = 336000;
-  let oldCarBuild = new Date().getFullYear() - carBuildYear; // محاسبه مقدار تفاوت سال ساخت با الان
-  // Set Base Price From Car Data's
-  // مرحله اول تعیین قیمت پایه و میزان جریمه دیرکرد براساس تایپ خودرو
-  let basePropertyDamage = 0;
-  let z1 = 0;
-  let z2 = 0;
-  let c32 = 0;
-  let c96 = 0;
-  if (
-    (carType == "passenger" && carBrand == 21) ||
-    carBrand == 16 ||
-    carModel == 383661
-  ) {
-    Base_price = 2294300; // پیکان ، پراید ، رنو و هیلمن
-    basePropertyDamage = 21300;
-    z1 = 1.66406;
-    z2 = 2.50588;
-    c32 = 340800;
-    c96 = 1160000;
-  } else if (carType == "passenger" && carCylinder < 4) {
-    Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر
-    basePropertyDamage = 2;
-  } else if (carType == "passenger" && carCylinder == 4) {
-    Base_price = 2697100; // قیمت پایه برای خودروهای زیر ۴ سیلندر
-    basePropertyDamage = 25100;
-    z1 = 1.67333;
-    z2 = 2.51;
-    c32 = 401600;
-    c96 = 1361600;
-  } else if (carType == "passenger" && carCylinder >= 6) {
-    Base_price = 3018400; // قیمت پایه برای خودروهای ۶سیلندر به بالا
-  } else if (carType == "motorcycle" && carCylinder == 0) {
-    Base_price = 481000; // قیمت پایه برای موتورسیکلت گازی
-  } else if (carType == "motorcycle" && carCylinder == 1) {
-    Base_price = 587600; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
-  } else if (carType == "motorcycle" && carCylinder >= 2) {
-    Base_price = 645500; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
-  } else if (carType == "motorcycle" && carCylinder == 20) {
-    Base_price = 694200; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
-  } else if (carType == "van" && carModel == 7) {
-    Base_price = 5555400; // قیمت پایه برای خودرو ون تا ۷ نفره
-  } else if (carType == "van" && (carModel == 9 || carModel == 8)) {
-    Base_price = 5715900; // قیمت پایه برای خودرو ون تا ۹ نفره
-  } else if (carType == "van" && carModel == 10) {
-    Base_price = 5779600; // قیمت پایه برای خودرو ون تا ۱۰ نفره
-  } else if (carType == "van" && carModel <= 16 && carModel >= 11) {
-    Base_price = 7105400; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
-  } else if (carType == "van" && carModel <= 21 && carModel >= 17) {
-    Base_price = 7380700; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
-  } else if (carType == "van" && carModel <= 27 && carModel >= 22) {
-    Base_price = 10883700; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
-  } else if (carType == "van" && carModel <= 40 && carModel >= 28) {
-    Base_price = 13693300; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
-  } else if (carType == "van" && carModel <= 44 && carModel >= 41) {
-    Base_price = 14532100; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
-  } else if (carType == "pickup" && carModel == 10) {
-    Base_price = 2373500; // قیمت پایه برای خودرو بارکش تا ۱ تن
-  } else if (carType == "pickup" && carModel == 13) {
-    Base_price = 2858000; // قیمت پایه برای خودرو بارکش تا ۳ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    (carModel == 35 || carModel == 4)
-  ) {
-    Base_price = 3617600; // قیمت پایه برای خودرو بارکش تا ۵ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 510
-  ) {
-    Base_price = 4634800; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 1020
-  ) {
-    Base_price = 5393300; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 200
-  ) {
-    Base_price = 5715900; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
-  }
-
-  let ThirdDiscountCalculated = 0;
-
-  // محاسبه جریمه دیرکرد
-  let jarimeCalculate = 0;
-  let jarimeCalculateDay = 0;
-  if (!jarimeDays == 0 || policyStatus == "no") {
-    if (jarimeDays > 365 || policyStatus == "no") {
-      jarimeDays = 365;
-    }
-    jarimeCalculate = (Base_price * jarimeDays) / 365;
-    jarimeCalculateDay = jarimeCalculate / jarimeDays;
-    // Base_price = Base_price + jarimeCalculate;
-  }
-
-  // محاسبه حداکثر تعهد مالی برای جبران خسارت
-
-  let finalBaseProperty = 0;
-  if (propertyDamage > 16 && propertyDamage < 33) {
-    let baseProperty = propertyDamage - 16;
-    let step1 = baseProperty * basePropertyDamage;
-    finalBaseProperty = step1;
-    Base_price = Base_price + step1;
-  }
-  if (propertyDamage > 32 && propertyDamage < 97) {
-    let basePropertyStep2 = basePropertyDamage / z1;
-    let base = propertyDamage - 32;
-    let first = basePropertyStep2 * base;
-    let step2 = first + c32;
-    finalBaseProperty = step2;
-    Base_price = Base_price + step2;
-  }
-  if (propertyDamage > 96) {
-    let basePropertyStep3 = basePropertyDamage / z2;
-    let base = propertyDamage - 96;
-    let first = basePropertyStep3 * base;
-    let step3 = first + c96;
-    finalBaseProperty = step3;
-    Base_price = Base_price + step3;
-  }
-
-  let Final_price = Base_price;
-
-  Final_price = Final_price + Havades_ranande;
-  // خودروهای بالای 15 سال ساخت به ازای هر سال 2درصد افزایش قیمت دارند
-  if (oldCarBuild > 15) {
-    let a = (+oldCarBuild - 15) * 2; // محاسبه عدد درصد
-    let value = (+Final_price * +a) / 100; // محاسبه مقدار عددی افزایش
-    Final_price = +Final_price + value;
-  }
-  let finalPriceWithoutMaaliat = Final_price;
-  let maaliat = 0;
-  maaliat = Final_price * 0.09;
-  Final_price = Final_price + maaliat;
-  Final_price = Final_price + jarimeCalculate;
-  logger.log_info(
-    "Jarime Dirkard: " +
-      Math.round(jarimeCalculate) +
-      "   " +
-      " ThirdDiscount: " +
-      ThirdDiscountCalculated +
-      "   " +
-      " HavadesRanande: " +
-      Havades_ranande +
-      "   " +
-      "Maaliat: " +
-      Math.round(maaliat) +
-      "   " +
-      " Final Price: " +
-      Final_price
-  );
-  const data = {
-    finalPrice: Math.ceil(Final_price),
-    withoutMaaliat: Math.ceil(finalPriceWithoutMaaliat),
-    maaliat: Math.ceil(maaliat),
-    jarimeDays: Math.ceil(jarimeCalculate),
-    jarimeCalculateDay: Math.ceil(jarimeCalculateDay),
-    jarimeDaysDays: jarimeDays,
-    thirdDiscount: ThirdDiscountCalculated,
-    havadesFinal: Havades_ranande,
-    finalBaseProperty: finalBaseProperty,
   };
   callback(null, data);
 }
