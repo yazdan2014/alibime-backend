@@ -76,82 +76,12 @@ function thirdpartyPriceCalculate(
 ) {
   let Base_price = 0; //Mokhtalef
   let Havades_ranande = 0;
+  let z40 = 1.66
+  let z120 = 2.5
   let oldCarBuild = new Date().getFullYear() - carBuildYear; // محاسبه مقدار تفاوت سال ساخت با الان
   // Set Base Price From Car Data's
   // مرحله اول تعیین قیمت پایه و میزان جریمه دیرکرد براساس تایپ خودرو
 
-  if (
-    (carType == "passenger" && carBrand == 21) ||
-    carBrand == 16 ||
-    carModel == 383661
-  ) {
-    Base_price = 2294300; // پیکان ، پراید ، رنو و هیلمن 
-    Havades_ranande = 336000;
-  } else if (carType == "passenger" && carCylinder < 4) {
-    Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر 
-    Havades_ranande = 222300;
-  } else if (carType == "passenger" && carCylinder == 4) {
-    Base_price = 2697100; // قیمت پایه برای خودروهای زیر ۴ سیلندر
-    Havades_ranande = 336000;
-    // Base_price = 21965342;
-  } else if (carType == "passenger" && carCylinder >= 6) {
-    Base_price = 3018400; // قیمت پایه برای خودروهای ۶سیلندر به بالا
-    Havades_ranande = 336000;
-  } else if (carType == "motorcycle" && carCylinder == 0) {
-    Base_price = 481000; // قیمت پایه برای موتورسیکلت گازی
-    Havades_ranande = 113960;
-  } else if (carType == "motorcycle" && carCylinder == 1) {
-    Base_price = 587600; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
-    Havades_ranande = 177600;
-  } else if (carType == "motorcycle" && carCylinder >= 2) {
-    Base_price = 645500; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
-    Havades_ranande = 122100;
-  } else if (carType == "motorcycle" && carCylinder == 20) {
-    Base_price = 694200; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
-    Havades_ranande = 122100;
-  } else if (carType == "van" && carModel == 7) {
-    Base_price = 5555400; // قیمت پایه برای خودرو ون تا ۷ نفره
-  } else if (carType == "van" && (carModel == 9 || carModel == 8)) {
-    Base_price = 5715900; // قیمت پایه برای خودرو ون تا ۹ نفره
-  } else if (carType == "van" && carModel == 10) {
-    Base_price = 5779600; // قیمت پایه برای خودرو ون تا ۱۰ نفره
-  } else if (carType == "van" && carModel <= 16 && carModel >= 11) {
-    Base_price = 7105400; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
-  } else if (carType == "van" && carModel <= 21 && carModel >= 17) {
-    Base_price = 7380700; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
-  } else if (carType == "van" && carModel <= 27 && carModel >= 22) {
-    Base_price = 10883700; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
-  } else if (carType == "van" && carModel <= 40 && carModel >= 28) {
-    Base_price = 13693300; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
-  } else if (carType == "van" && carModel <= 44 && carModel >= 41) {
-    Base_price = 14532100; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
-  } else if (carType == "pickup" && carModel == 10) {
-    Base_price = 2373500; // قیمت پایه برای خودرو بارکش تا ۱ تن
-    Havades_ranande = 576000;
-  } else if (carType == "pickup" && carModel == 13) {
-    Base_price = 2858000; // قیمت پایه برای خودرو بارکش تا ۳ تن
-    Havades_ranande = 576000;
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    (carModel == 35 || carModel == 4)
-  ) {
-    Base_price = 3617600; // قیمت پایه برای خودرو بارکش تا ۵ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 510
-  ) {
-    Base_price = 4634800; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 1020
-  ) {
-    Base_price = 5393300; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
-  } else if (
-    (carType == "pickup" || carType == "truck" || carType == "carrier") &&
-    carModel == 200
-  ) {
-    Base_price = 5715900; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
-  }
 
   let ThirdDiscountCalculated = 0;
   let havadesDiscountCalculated = 0;
@@ -173,6 +103,8 @@ function thirdpartyPriceCalculate(
   // محاسبه حداکثر تعهد مالی برای جبران خسارت
   let basePropertyDamage = 2510; //Mokhtalef
   let finalBaseProperty = 0;
+  let alpha = 20 * basePropertyDamage
+  let beta = 80 * basePropertyDamage / z40
   if (propertyDamage > 20 && propertyDamage < 41) {
     let baseProperty = propertyDamage - 20;
     let step1 = baseProperty * basePropertyDamage;
@@ -180,18 +112,18 @@ function thirdpartyPriceCalculate(
     Base_price = Base_price + step1;
   }
   if (propertyDamage > 40 && propertyDamage < 121) {
-    let basePropertyStep2 = basePropertyDamage / 1.67;
+    let basePropertyStep2 = basePropertyDamage / z40;
     let base = propertyDamage - 40;
     let first = basePropertyStep2 * base;
-    let step2 = first + 39148.8;
+    let step2 = first + alpha;
     finalBaseProperty = step2;
     Base_price = Base_price + step2;
   }
   if (propertyDamage > 120) {
-    let basePropertyStep3 = basePropertyDamage * 2.51;
+    let basePropertyStep3 = basePropertyDamage / z120;
     let base = propertyDamage - 120;
     let first = basePropertyStep3 * base;
-    let step3 = first + 132918.4;
+    let step3 = first + alpha + beta
     finalBaseProperty = step3;
     Base_price = Base_price + step3;
   }
@@ -318,20 +250,21 @@ function thirdpartyCalculate(
     z2 = 2.50588;
     c32 = 340800;
     c96 = 1160000;
+    Havades_ranande = 252000
   } else if (carType == "passenger" && carCylinder < 4) {
     Base_price = 1937500; // قیمت پایه برای خودروهای ۳ سیلندر
     basePropertyDamage = 2;
   } else if (carType == "passenger" && carCylinder == 4) {
     Base_price = 2697100; // قیمت پایه برای خودروهای زیر ۴ سیلندر
     basePropertyDamage = 25100;
-    Havades_ranande = 336000;
+    Havades_ranande = 420000;
     z1 = 1.67333;
     z2 = 2.51;
     c32 = 401600;
     c96 = 1361600;
-  } else if (carType == "passenger" && carCylinder >= 6) {
+  } else if (carType == "passenger" && carCylinder > 4) {
     Base_price = 3018400; // قیمت پایه برای خودروهای ۶سیلندر به بالا
-    Havades_ranande = 336000;
+    Havades_ranande = 420000;
     basePropertyDamage = 28100;
     z1 = 1.67262;
     z2 = 2.50893;
@@ -339,58 +272,70 @@ function thirdpartyCalculate(
     c96 = 1524800;
   } else if (carType == "motorcycle" && carCylinder == 0) {
     Base_price = 481000; // قیمت پایه برای موتورسیکلت گازی
-    Havades_ranande = 113960;
+    Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder == 1) {
     Base_price = 587600; // قیمت پایه برای موتورسیکلت دنده ای ۱ سیلندر
-    Havades_ranande = 177600;
+    Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder >= 2) {
     Base_price = 645500; // قیمت پایه برای موتورسیکلت دنده ای ۲ سیلندر به بالا
-    Havades_ranande = 122100;
+    Havades_ranande = 220000;
   } else if (carType == "motorcycle" && carCylinder == 20) {
     Base_price = 694200; // قیمت پایه برای موتورسیکلت دنده ای ۳چرخ یا سایدکار
-    Havades_ranande = 122100;
+    Havades_ranande = 220000;
   } else if (carType == "van" && carModel == 7) {
     Base_price = 5555400; // قیمت پایه برای خودرو ون تا ۷ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && (carModel == 9 || carModel == 8)) {
     Base_price = 5715900; // قیمت پایه برای خودرو ون تا ۹ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel == 10) {
     Base_price = 5779600; // قیمت پایه برای خودرو ون تا ۱۰ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 16 && carModel >= 11) {
     Base_price = 7105400; // قیمت پایه برای خودرو مینی بوس تا ۱۶ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 21 && carModel >= 17) {
     Base_price = 7380700; // قیمت پایه برای خودرو مینی بوس تا ۲۱ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 27 && carModel >= 22) {
     Base_price = 10883700; // قیمت پایه برای خودرو اتوبوس تا ۲۷ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 40 && carModel >= 28) {
     Base_price = 13693300; // قیمت پایه برای خودرو اتوبوس تا ۴۰ نفره
+    Havades_ranande = 600000
   } else if (carType == "van" && carModel <= 44 && carModel >= 41) {
     Base_price = 14532100; // قیمت پایه برای خودرو اتوبوس تا ۴۴ نفره
+    Havades_ranande = 600000
   } else if (carType == "pickup" && carModel == 10) {
     Base_price = 2373500; // قیمت پایه برای خودرو بارکش تا ۱ تن
-    Havades_ranande = 576000;
+    Havades_ranande = 720000;
   } else if (carType == "pickup" && carModel == 13) {
     Base_price = 2858000; // قیمت پایه برای خودرو بارکش تا ۳ تن
-    Havades_ranande = 576000;
+    Havades_ranande = 720000;
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     (carModel == 35 || carModel == 4)
   ) {
     Base_price = 3617600; // قیمت پایه برای خودرو بارکش تا ۵ تن
+    Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 510
   ) {
     Base_price = 4634800; // قیمت پایه برای خودرو بارکش تا ۱۰ تن
+    Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 1020
   ) {
     Base_price = 5393300; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
+    Havades_ranande = 720000
   } else if (
     (carType == "pickup" || carType == "truck" || carType == "carrier") &&
     carModel == 200
   ) {
     Base_price = 5715900; // قیمت پایه برای خودرو بارکش تا ۲۰ تن
+    Havades_ranande = 720000
   }
 
   // محاسبه حداکثر تعهد مالی برای جبران خسارت
