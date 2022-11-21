@@ -708,7 +708,7 @@ exports.updateStatusOrder = function (req, res) {
   }
 };
 
-exports.uploadImage = function (req, res) {
+exports.uploadImage = function (req, res) { //omgwhyzee
   try {
     let roles = ["superAdmin", "powerAdmin", "admin", "blog", "user"];
     authManager.authenticationWithRole(
@@ -792,7 +792,7 @@ exports.uploadImage = function (req, res) {
   }
 };
 
-exports.downloadImage = function (req, res) {
+exports.downloadImage = function (req, res) {//omgwhyzee
   try {
     authManager.authentication(req, res, function (accountId) {
       if (!req.params.imageName || req.params.imageName === "undefined")
