@@ -102,6 +102,12 @@ function databaseManager() {
               this.connected = true;
               this.client = client;
               this.database = client.db(dbname);
+
+              // const adminNewModel = require("database").adminNewModel;
+              // const admin = require("database").admins;
+              // let newAdmin = new adminNewModel("hooman2","h00m@n","hooman","asd","09199158708","superAdmin") new admin creater
+              // admin.addNew(newAdmin, function (error, result) {})
+              
               logger.log_info("connected to database");
               resolve();
             }
