@@ -1,18 +1,20 @@
-const databaseManager = require("./lib/dataBaseManager").getInstance();
+const databaseManager = require('./lib/dataBaseManager').getInstance();
 
-const adminRepository = require("./lib/repositories/adminRepository");
-const accountRepository = require("./lib/repositories/accountRepository");
-const reminderRepository = require("./lib/repositories/reminderRepository");
-const orderRepository = require("./lib/repositories/orderRepository");
-const carRepository = require("./lib/repositories/carRepository");
-const paymentRepository = require("./lib/repositories/paymentRepository");
+const adminRepository = require('./lib/repositories/adminRepository');
+const accountRepository = require('./lib/repositories/accountRepository');
+const reminderRepository = require('./lib/repositories/reminderRepository');
+const orderRepository = require('./lib/repositories/orderRepository');
+const carRepository = require('./lib/repositories/carRepository');
+const paymentRepository = require('./lib/repositories/paymentRepository');
+const ticketRepository = require('./lib/repositories/ticketRepository');
 
-const adminModels = require("./lib/models/adminModel");
-const userModels = require("./lib/models/accountModel");
-const reminderModels = require("./lib/models/reminderModel");
-const orderModels = require("./lib/models/orderModel");
-const carModels = require("./lib/models/carModel");
-const paymentModels = require("./lib/models/paymentModel");
+const adminModels = require('./lib/models/adminModel');
+const userModels = require('./lib/models/accountModel');
+const reminderModels = require('./lib/models/reminderModel');
+const orderModels = require('./lib/models/orderModel');
+const carModels = require('./lib/models/carModel');
+const paymentModels = require('./lib/models/paymentModel');
+const ticketModels = require('./lib/models/ticketModel');
 
 function connect() {
   return databaseManager.connect();
@@ -28,6 +30,7 @@ const reminders = new reminderRepository();
 const orders = new orderRepository();
 const cars = new carRepository();
 const payments = new paymentRepository();
+const tickets = new ticketRepository();
 
 module.exports = {
   connect: connect,
@@ -39,6 +42,10 @@ module.exports = {
   orders: orders,
   cars: cars,
   payments: payments,
+  tickets: tickets,
+
+  ticketModel: ticketModels.ticketModel,
+  ticketAnswersModel: ticketModels.ticketAnswersModel,
 
   adminModel: adminModels.adminModel,
   adminNewModel: adminModels.adminNewModel,
