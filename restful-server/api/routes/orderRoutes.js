@@ -3,14 +3,10 @@
 module.exports = function (app) {
   const orderController = require("../controllers/orderController");
   const carBodyController = require("../controllers/carBodyController");
-  const ticketcontroller = require('../controllers/ticketController');
-
-  app.route('/v1/order/ticket').get(ticketcontroller.getsTickets);
-  app.route('/v1/order/ticket').post(ticketcontroller.addNewTicket);
 
   app.route("/v1/order/getAllByStatus").get(orderController.getAllByStatus);
   app.route("/v1/order/getList").get(orderController.getList);
-  app.route("/v1/order").get(orderController.getsOrders);
+  // app.route("/v1/order").get(orderController.getsOrders);
   app.route("/v1/order").post(orderController.addNewOrder2);
   app.route("/v1/order/car-body").post(carBodyController.addNewOrder);
   app.route("/v1/order/car-body").put(carBodyController.updateOrder);
