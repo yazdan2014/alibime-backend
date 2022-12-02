@@ -1,8 +1,12 @@
 {
   "disks": [
     {
-      "name": "src",
-      "mountTo": "/usr/src"
+      "name": "logs",
+      "mountTo": "/usr/src/logs"
+    },
+    { 
+      "name": "images",
+      "mountTo": "/usr/src/images"
     }
   ]
 }

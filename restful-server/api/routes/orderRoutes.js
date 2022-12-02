@@ -6,7 +6,7 @@ module.exports = function (app) {
 
   app.route("/v1/order/getAllByStatus").get(orderController.getAllByStatus);
   app.route("/v1/order/getList").get(orderController.getList);
-  // app.route("/v1/order").get(orderController.getsOrders);
+  app.route("/v1/order").get(orderController.getsOrders);
   app.route("/v1/order").post(orderController.addNewOrder2);
   app.route("/v1/order/car-body").post(carBodyController.addNewOrder);
   app.route("/v1/order/car-body").put(carBodyController.updateOrder);

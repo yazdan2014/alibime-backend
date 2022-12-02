@@ -36,12 +36,13 @@ exports.getsTickets = function (req, res) {
 };
 
 exports.addNewTicket = function (req, res) {
-  logger.log_info("MIad")
   try {
     if (!req.body) return apiResponse.sendBadRequest(res);
+    if (!req.body.orderId || !req.body.title || !req.body.text || !req.body.attachmentsURL) return apiResponse.sendBadRequest(res);
 
     authManager.authentication(req, res, function (accountId) {
       let newTicket = new ticketModel(
+        getInsuranceCode(),
         accountId,
         req.body.orderId,
         req.body.title,
@@ -69,3 +70,8 @@ exports.addNewTicket = function (req, res) {
     apiResponse.sendInternalError(res, error);
   }
 };
+
+function getInsuranceCode() {
+  // return Math.floor(Math.random().toString(10).substr(4, 6));
+  return Math.random().toString(10).substr(5, 6).toUpperCase();
+}
