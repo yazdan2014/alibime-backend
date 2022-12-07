@@ -60,11 +60,10 @@ class ticketRepository {
             {
               $project: {
                 _id: 1,
-                type: 1,
                 status: 1,
-                code: 1,
-                firstName: { $arrayElemAt: ["$users.firstName", 0] },
-                lastName: { $arrayElemAt: ["$users.lastName", 0] },
+                phoneNumber: { $arrayElemAt: ["$users.mobilePhone", 0] },
+                trackingCode:1,
+                title:1
               },
             },
           ])
