@@ -5,5 +5,6 @@ module.exports = function (app) {
 
   app.route('/v1/ticket').get(ticketcontroller.getsTickets);
   app.route('/v1/ticket').post(ticketcontroller.addNewTicket);
+  app.route('/v1/alltickets').post(ticketcontroller.getList);
 
 };

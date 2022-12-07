@@ -1,4 +1,4 @@
-FROM node:12
+    FROM node:12
 
 WORKDIR /usr/src/app
 
@@ -7,7 +7,7 @@ COPY package.json ./
 COPY . .
 
 RUN chmod +x ./clean.sh
-RUN ./clean.sh
+# RUN ./clean.sh
 RUN npm install
 
 RUN mkdir /usr/src/logs

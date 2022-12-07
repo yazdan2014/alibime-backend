@@ -43,6 +43,47 @@ class ticketRepository {
       }
     };
 
+    this.getList = function (skip, limit, callback) {
+      try {
+        databaseManager.database
+          .collection("tickets")
+          .aggregate([
+            { $match: { deleted: { $ne: true } } },
+            {
+              $lookup: {
+                from: "users",
+                localField: "accountId",
+                foreignField: "_id",
+                as: "users",
+              },
+            },
+            {
+              $project: {
+                _id: 1,
+                type: 1,
+                status: 1,
+                code: 1,
+                firstName: { $arrayElemAt: ["$users.firstName", 0] },
+                lastName: { $arrayElemAt: ["$users.lastName", 0] },
+              },
+            },
+          ])
+          .limit(Number(limit))
+          .skip(Number(skip))
+          .sort({ requestDate: 1 })
+          .toArray(function (err, res) {
+            if (err) {
+              return callback(err, null);
+            }
+            logger.log_info("gets tickets list done");
+            callback(null, res);
+          });
+      } catch (error) {
+        logger.log_error(error);
+        callback(error, null);
+      }
+    };
+
     this.gets = function (accountId, skip, limit, callback) {
         try {
           let o_accountId = new mongodb.ObjectID(accountId);

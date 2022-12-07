@@ -13,10 +13,10 @@ function ticketModel(
 ) {
   if (trackingCode) this.trackingCode = Number(trackingCode)
   if (accountId) this.accountId = new mongodb.ObjectID(accountId);
-  if (orderId) this.orderId = Number(orderId);
+  if (orderId) this.orderId = String(orderId);
   if (title) this.title = String(title);
-  if (text) this.text = Number(orderId);
-  if (attachmentsURL) this.attachmentsURL = String(text);
+  if (text) this.text = String(text);
+  if (attachmentsURL) this.attachmentsURL = String(attachmentsURL);
   if (status) this.status = String(status);
 }
 
@@ -30,10 +30,10 @@ function ticketAnswersModel(
 ) {
   if (ticketId) this.ticketId = new mongodb.ObjectID(ticketId);
   if (accountId) this.accountId = new mongodb.ObjectID(accountId);
-  if (orderId) this.orderId = Number(orderId);
+  if (orderId) this.orderId = String(orderId);
   if (authorId) this.author = new mongodb.ObjectID(authorId);
-  if (text) this.text = Number(orderId);
-  if (attachmentsURL) this.attachmentsURL = String(text);
+  if (text) this.text = String(text);
+  if (attachmentsURL) this.attachmentsURL = String(attachmentsURL);
 }
 
 module.exports = {
