@@ -20,23 +20,6 @@ function ticketModel(
   if (status) this.status = String(status);
 }
 
-function ticketAnswersModel(
-  ticketId,
-  accountId,
-  orderId,
-  authorId,
-  text,
-  attachmentsURL
-) {
-  if (ticketId) this.ticketId = new mongodb.ObjectID(ticketId);
-  if (accountId) this.accountId = new mongodb.ObjectID(accountId);
-  if (orderId) this.orderId = String(orderId);
-  if (authorId) this.author = new mongodb.ObjectID(authorId);
-  if (text) this.text = String(text);
-  if (attachmentsURL) this.attachmentsURL = String(attachmentsURL);
-}
-
 module.exports = {
   ticketModel,
-  ticketAnswersModel
 };

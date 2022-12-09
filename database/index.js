@@ -7,6 +7,7 @@ const orderRepository = require('./lib/repositories/orderRepository');
 const carRepository = require('./lib/repositories/carRepository');
 const paymentRepository = require('./lib/repositories/paymentRepository');
 const ticketRepository = require('./lib/repositories/ticketRepository');
+const ticketAnswersRepository = require('./lib/repositories/ticketAnswerRepository');
 
 const adminModels = require('./lib/models/adminModel');
 const userModels = require('./lib/models/accountModel');
@@ -15,6 +16,7 @@ const orderModels = require('./lib/models/orderModel');
 const carModels = require('./lib/models/carModel');
 const paymentModels = require('./lib/models/paymentModel');
 const ticketModels = require('./lib/models/ticketModel');
+const ticketAnswerModels = require('./lib/models/ticketAnswersModel');
 
 function connect() {
   return databaseManager.connect();
@@ -31,6 +33,7 @@ const orders = new orderRepository();
 const cars = new carRepository();
 const payments = new paymentRepository();
 const tickets = new ticketRepository();
+const ticketAnswers = new ticketAnswersRepository();
 
 module.exports = {
   connect: connect,
@@ -43,9 +46,10 @@ module.exports = {
   cars: cars,
   payments: payments,
   tickets: tickets,
+  ticketAnswers: ticketAnswers,
 
   ticketModel: ticketModels.ticketModel,
-  ticketAnswersModel: ticketModels.ticketAnswersModel,
+  ticketAnswersModel: ticketAnswerModels.ticketAnswersModel,
 
   adminModel: adminModels.adminModel,
   adminNewModel: adminModels.adminNewModel,
