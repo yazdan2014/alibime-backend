@@ -156,7 +156,6 @@ exports.addNewTicketAnswer = function (req, res) {
       let newTicketAnswer = new ticketAnswersModel(
         req.body.ticketId,
         accountId,
-        "admin",
         req.body.text,
         req.body.attachmentsURL
       );
