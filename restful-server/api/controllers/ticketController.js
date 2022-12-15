@@ -126,8 +126,10 @@ exports.getsTicketAnswers = function (req, res) {
       let limit = 20;
       if (req.query.skip) skip = req.query.skip;
       if (req.query.limit) limit = req.query.limit;
+      if (!req.query.ticketId) return apiResponse.sendBadRequest(res);
 
       ticketAnswers.getsAnswers(
+        req.query.ticketId,
         accountId,
         skip,
         limit,

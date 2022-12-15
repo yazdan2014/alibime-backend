@@ -5,14 +5,15 @@ const mongodb = require("mongodb");
 class ticketRepository {
   constructor() {
     //-------------------------------------------------------------------------------
-    this.getsAnswers = function (accountId, skip, limit, callback) {
+    this.getsAnswers = function (ticketId ,accountId, skip, limit, callback) {
       try {
         let o_accountId = new mongodb.ObjectID(accountId);
+        let o_ticketId = new mongodb.ObjectID(ticketId);
 
         databaseManager.database
           .collection("ticketAnswers")
           .find({
-            $and: [{ authorId: o_accountId }, { deleted: { $ne: true } }],
+            $and: [{ authorId: o_accountId }, { deleted: { $ne: true } }, {ticketId: o_ticketId}],
           })
           .limit(Number(limit))
           .skip(Number(skip))
